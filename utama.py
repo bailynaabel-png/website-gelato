@@ -1,33 +1,57 @@
 import streamlit as st
 import pandas as pd
+import os
 
-st.set_page_config(page_title="Katalog Gelato", layout="wide")
+# Konfigurasi halaman
+st.set_page_config(
+    page_title="D'Gelato 🍦",
+    layout="wide"
+)
 
-st.title("🍦 Katalog Gelato")
+# Judul website
+st.title("🍦 D'Gelato")
+st.caption("Sweet • Fresh • Happiness in Every Scoop ✨")
 st.divider()
 
-try:
-    df = pd.read_csv("data-gelato.csv")
+# Baca data CSV
+df = pd.read_csv("data-gelato.csv")
 
-    daftar_kategori = df['kategori'].unique()
+# Ambil kategori unik
+kategori_unik = df['kategori'].unique()
 
-    for kat in daftar_kategori:
-        st.header(f"🍨 Rasa {kat}")
+for kat in kategori_unik:
 
-        data_per_kat = df[df['kategori'] == kat]
+    st.header(f"🍨 {kat}")
 
-        cols = st.columns(3)
+    data_kat = df[df['kategori'] == kat]
 
-        for index, row in data_per_kat.reset_index().iterrows():
+    cols = st.columns(3)
 
-            with cols[index % 3]:
+    for index, row in data_kat.reset_index().iterrows():
 
-                st.subheader(row['nama'])
-                st.markdown(f"### Rp {row['harga']}")
-                st.write(f"Status: {row['status']}")
-                st.write(f"Foto: {row['foto']}")
+        with cols[index % 3]:
 
-        st.divider()
+            # tampilkan foto
+            if os.path.exists(row['foto']):
+                st.image(row['foto'], use_container_width=True)
 
-except Exception as e:
-    st.error(f"Terjadi kesalahan: {e}")
+            st.subheader(row['nama'])
+
+            st.markdown(f"### 💸 Rp {row['harga']}")
+
+            st.success(f"Status: {row['status']}")
+
+    st.divider()
+
+# Footer
+st.subheader("📍 Hubungi Kami")
+
+st.write("""
+**D'Gelato 🍦**
+
+Yogyakarta, Indonesia
+
+📱 WhatsApp: 08123456789
+""")
+
+st.caption("© 2026 D'Gelato — All Rights Reserved")
