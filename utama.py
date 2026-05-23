@@ -2,45 +2,72 @@ import streamlit as st
 import pandas as pd
 import os
 
-# Konfigurasi
+# ==========================
+# KONFIGURASI WEBSITE
+# ==========================
 st.set_page_config(
     page_title="D'Gelatos 🍦",
     page_icon="🍨",
     layout="wide"
 )
 
-# Background
+# ==========================
+# STYLE / BACKGROUND
+# ==========================
 st.markdown("""
 <style>
 
 [data-testid="stAppViewContainer"]{
-background: linear-gradient(135deg,#ffd6e8,#fff3c7,#dff6ff);
+background: linear-gradient(
+135deg,
+#ffd6e8,
+#fff3c7,
+#dff6ff
+);
+}
+
+[data-testid="stHeader"]{
+background: rgba(0,0,0,0);
 }
 
 h1{
 text-align:center;
 color:#ff4d6d;
+font-size:60px;
+}
+
+div[data-testid="column"]{
+background:white;
+padding:15px;
+border-radius:20px;
+box-shadow:0px 6px 15px rgba(0,0,0,0.12);
 }
 
 </style>
 """, unsafe_allow_html=True)
 
-# Banner
+# ==========================
+# BANNER
+# ==========================
 if os.path.exists("D'gelato.png"):
     st.image("D'gelato.png", use_container_width=True)
 
-# Judul
+# ==========================
+# JUDUL
+# ==========================
 st.title("🍦 D'Gelatos")
 st.caption("Sweet • Fresh • Happiness in Every Scoop ✨")
 
 st.divider()
 
-# Baca data CSV
+# ==========================
+# BACA CSV
+# ==========================
 df = pd.read_csv("data-gelato.csv")
 
-kategori = df["kategori"].unique()
+kategori_list = df["kategori"].unique()
 
-for kat in kategori:
+for kat in kategori_list:
 
     st.header(f"🍨 {kat}")
 
@@ -52,23 +79,31 @@ for kat in kategori:
 
         with cols[index % 3]:
 
+            # FOTO
             if os.path.exists(row["foto"]):
                 st.image(row["foto"], use_container_width=True)
 
+            # NAMA
             st.subheader(row["nama"])
 
+            # HARGA
             st.markdown(f"### 💸 Rp {row['harga']}")
 
+            # STATUS
             st.success(f"Status: {row['status']}")
 
-            tombol = st.button(
+            # TOMBOL ORDER (FIX NO ERROR)
+            if st.button(
                 f"🛒 Order {row['nama']}",
-                key=f"btn{index}"
-            )
+                key=f"order_{kat}_{index}"
+            ):
+                st.success("Pesanan ditambahkan!")
 
     st.divider()
 
-# Footer
+# ==========================
+# FOOTER
+# ==========================
 st.subheader("📍 Hubungi Kami")
 
 col1, col2 = st.columns(2)
