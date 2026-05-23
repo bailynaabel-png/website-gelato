@@ -7,7 +7,7 @@ st.title("🍦 Katalog Gelato")
 st.divider()
 
 try:
-    df = pd.read_csv("data_gelato.csv")
+    df = pd.read_csv("data-gelato.csv")
 
     daftar_kategori = df['kategori'].unique()
 
