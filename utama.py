@@ -2,62 +2,45 @@ import streamlit as st
 import pandas as pd
 import os
 
-# KONFIGURASI WEBSITE
+# Konfigurasi
 st.set_page_config(
     page_title="D'Gelatos 🍦",
     page_icon="🍨",
     layout="wide"
 )
 
-# BACKGROUND AESTHETIC
+# Background
 st.markdown("""
 <style>
 
 [data-testid="stAppViewContainer"]{
-background: linear-gradient(
-135deg,
-#ffd6e8,
-#fff3c7,
-#dff6ff
-);
-}
-
-[data-testid="stHeader"]{
-background: rgba(0,0,0,0);
+background: linear-gradient(135deg,#ffd6e8,#fff3c7,#dff6ff);
 }
 
 h1{
 text-align:center;
 color:#ff4d6d;
-font-size:55px;
-}
-
-div[data-testid="column"]{
-background:white;
-padding:15px;
-border-radius:20px;
-box-shadow:0px 6px 15px rgba(0,0,0,0.12);
 }
 
 </style>
 """, unsafe_allow_html=True)
 
-# BANNER CANVA
+# Banner
 if os.path.exists("D'gelato.png"):
     st.image("D'gelato.png", use_container_width=True)
 
-# JUDUL
+# Judul
 st.title("🍦 D'Gelatos")
 st.caption("Sweet • Fresh • Happiness in Every Scoop ✨")
 
 st.divider()
 
-# BACA CSV
+# Baca data CSV
 df = pd.read_csv("data-gelato.csv")
 
-kategori_unik = df["kategori"].unique()
+kategori = df["kategori"].unique()
 
-for kat in kategori_unik:
+for kat in kategori:
 
     st.header(f"🍨 {kat}")
 
@@ -69,28 +52,26 @@ for kat in kategori_unik:
 
         with cols[index % 3]:
 
-            # FOTO PRODUK
             if os.path.exists(row["foto"]):
                 st.image(row["foto"], use_container_width=True)
 
-            # INFO PRODUK
             st.subheader(row["nama"])
 
             st.markdown(f"### 💸 Rp {row['harga']}")
 
             st.success(f"Status: {row['status']}")
 
-            st.button(
+            tombol = st.button(
                 f"🛒 Order {row['nama']}",
                 key=f"btn{index}"
             )
 
     st.divider()
 
-# FOOTER
+# Footer
 st.subheader("📍 Hubungi Kami")
 
-col1,col2 = st.columns(2)
+col1, col2 = st.columns(2)
 
 with col1:
     st.info("""
